@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculadora freelance local para presupuestos digitales.">
+  <title>Calculadora freelance de presupuestos digitales</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Herramienta local</p>
+      <h1 id="page-title">Calculadora freelance de presupuestos digitales</h1>
+      <p>Calcula presupuestos por horas, por paquete o mensual para servicios digitales, con revisiones, extras, descuento e impuestos opcionales.</p>
+    </section>
+    <section class="workspace" aria-label="Calculadora">
+      <form id="budget-form" class="budget-form" novalidate>
+        <h2>Datos del presupuesto</h2>
+        <div class="form-grid">
+          <div class="field"><label for="client-name">Nombre del cliente</label><input id="client-name" name="clientName" type="text"></div>
+          <div class="field"><label for="project-name">Nombre del proyecto</label><input id="project-name" name="projectName" type="text"></div>
+          <div class="field"><label for="service">Servicio</label><select id="service" name="service" required></select></div>
+          <div class="field"><label for="budget-model">Modelo de presupuesto</label><select id="budget-model" name="budgetModel" required></select></div>
+          <div class="field"><label for="currency">Moneda de salida</label><select id="currency" name="currency" required></select><p id="rate-status" class="hint">Cargando tipos de cambio actuales...</p></div>
+          <div class="field"><label for="validity">Validez de la estimación</label><input id="validity" name="validity" type="text" value="15 días"></div>
+        </div>
+        <div class="field"><label for="scope">Descripción breve del alcance</label><textarea id="scope" name="scope" rows="3" placeholder="Ejemplo: Diseño y configuración de una web básica de 5 páginas para presentar servicios, captar contactos y mostrar información de la marca."></textarea></div>
+        <div class="field"><label for="deliverables">Entregables incluidos</label><textarea id="deliverables" name="deliverables" rows="3" placeholder="Ejemplo: Diseño responsive, instalación básica, formulario de contacto, optimización inicial, configuración de páginas principales y revisión final."></textarea></div>
+        <h2>Precio base</h2>
+        <div class="form-grid model-fields" data-model-fields="hourly">
+          <div class="field"><label for="hours">Horas estimadas</label><input id="hours" name="hours" type="number" min="0" step="0.5" value="10"></div>
+          <div class="field"><label for="hourly-rate">Tarifa freelance por hora (EUR)</label><input id="hourly-rate" name="hourlyRate" type="number" min="0" step="1" value="50"></div>
+        </div>
+        <div class="form-grid model-fields" data-model-fields="package" hidden>
+          <div class="field"><label for="package-price">Precio del paquete (EUR)</label><input id="package-price" name="packagePrice" type="number" min="0" step="1" value="900"></div>
+        </div>
+        <div class="form-grid model-fields" data-model-fields="monthly" hidden>
+          <div class="field"><label for="monthly-fee">Cuota mensual (EUR)</label><input id="monthly-fee" name="monthlyFee" type="number" min="0" step="1" value="450"></div>
+          <div class="field"><label for="months">Número de meses</label><input id="months" name="months" type="number" min="1" step="1" value="3"></div>
+          <div class="field"><label for="setup-fee">Configuración inicial (EUR)</label><input id="setup-fee" name="setupFee" type="number" min="0" step="1" value="150"></div>
+        </div>
+        <h2>Ajustes</h2>
+        <div class="form-grid">
+          <div class="field"><label for="complexity">Complejidad</label><select id="complexity" name="complexity" required></select></div>
+          <div class="field"><label for="urgency">Urgencia</label><select id="urgency" name="urgency" required></select></div>
+          <div class="field"><label for="included-revisions">Revisiones incluidas</label><input id="included-revisions" name="includedRevisions" type="number" min="0" step="1" value="2"></div>
+          <div class="field"><label for="requested-revisions">Revisiones solicitadas</label><input id="requested-revisions" name="requestedRevisions" type="number" min="0" step="1" value="2"></div>
+          <div class="field"><label for="revision-rate">Precio por revisión extra (EUR)</label><input id="revision-rate" name="revisionRate" type="number" min="0" step="1" value="50"></div>
+        </div>
+        <section class="extras-section" aria-labelledby="extras-title"><h2 id="extras-title">Extras o añadidos</h2><p class="hint">Presets internos orientativos y editables.</p><div id="extras-list" class="extras-list"></div></section>
+        <details class="advanced-section"><summary>Ajustes avanzados</summary><div class="form-grid">
+          <div class="field"><label for="commercial-surcharge">Recargo comercial opcional (%)</label><input id="commercial-surcharge" name="commercialSurcharge" type="number" min="0" max="1000" step="1" value="0"></div>
+          <div class="field"><label for="discount">Descuento (%)</label><input id="discount" name="discount" type="number" min="0" max="100" step="1" value="0"></div>
+          <div class="field field-checkbox"><input id="apply-tax" name="applyTax" type="checkbox"><label for="apply-tax">Aplicar impuestos</label></div>
+          <div class="field"><label for="tax-rate">Impuestos (%)</label><input id="tax-rate" name="taxRate" type="number" min="0" max="100" step="1" value="21" disabled></div>
+        </div></details>
+        <div class="field"><label for="notes">Condiciones o notas</label><textarea id="notes" name="notes" rows="3" placeholder="Ejemplo: No incluye licencias premium, hosting, dominio, textos definitivos ni mantenimiento mensual salvo acuerdo adicional."></textarea></div>
+        <div class="form-actions"><button type="submit">Calcular presupuesto</button><button type="button" id="copy-summary" class="secondary-button">Copiar resumen</button><button type="button" id="print-summary" class="secondary-button" aria-describedby="print-help">Imprimir / Guardar como PDF</button><button type="reset" class="secondary-button">Restablecer</button></div>
+        <p id="print-help" class="print-help">Para guardar como PDF: pulsa “Imprimir / Guardar como PDF” y, en la ventana de impresión, selecciona “Microsoft Print to PDF” o “Guardar como PDF” como destino. Así podrás guardar una copia digital y, si lo deseas, imprimirla en papel más adelante. Si no aparece la opción PDF, revisa que “Microsoft Print to PDF” esté activado en Windows.</p>
+        <div id="message" class="message" role="alert" aria-live="polite"></div>
+      </form>
+      <aside class="summary-panel" aria-labelledby="summary-title">
+        <h2 id="summary-title">Resumen</h2><p id="summary-service" class="summary-service">Selecciona un servicio y calcula el presupuesto.</p>
+        <dl class="summary-list"><div><dt>Tipo de cambio</dt><dd id="exchange-rate">1 EUR = 1,00 EUR</dd></div><div><dt>Base del servicio</dt><dd id="base-service">0,00 €</dd></div><div><dt>Ajuste por complejidad</dt><dd id="complexity-adjustment">0,00 €</dd></div><div><dt>Ajuste por urgencia</dt><dd id="urgency-adjustment">0,00 €</dd></div><div><dt>Revisiones extra</dt><dd id="revision-cost">0,00 €</dd></div><div><dt>Extras</dt><dd id="extras-total">0,00 €</dd></div><div><dt>Recargo comercial opcional</dt><dd id="commercial-surcharge-value">0,00 €</dd></div><div><dt>Descuento</dt><dd id="discount-value">0,00 €</dd></div><div><dt>Impuestos</dt><dd id="taxes">0,00 €</dd></div></dl>
+        <div class="total-box"><span>Total estimado</span><strong id="total">0,00 €</strong></div>
+        <p class="note">Estimación orientativa. Revisa alcance, entregables, plazos, revisiones, impuestos y condiciones.</p>
+        <section class="copy-panel" aria-labelledby="copy-title"><h2 id="copy-title">Resumen comercial</h2><pre id="commercial-summary" tabindex="0">Calcula el presupuesto para generar un resumen copiable.</pre></section>
+      </aside>
+    </section>
+  </main>
+  <script src="assets/js/services.js"></script><script src="assets/js/calculator.js"></script><script src="assets/js/app.js"></script>
+</body>
+</html>
